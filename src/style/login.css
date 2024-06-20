@@ -29,15 +29,24 @@
 
 .login-box {
   display: flex;
+  justify-content: center;
   align-items: center;
   text-align: center;
   overflow: hidden;
+  flex-direction: column;
 }
-
+.login-type {
+  margin: 10px;
+}
 .login-form {
   width: 360px;
 }
-
+.phone-in-form {
+  position: absolute;
+  top: 100px;
+  right: 160px;
+  /* transform: translate(-100%, -100%); */
+}
 .avatar {
   width: 350px;
   height: 80px;

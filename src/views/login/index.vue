@@ -21,6 +21,8 @@ import User from "@iconify-icons/ri/user-3-fill";
 defineOptions({
   name: "Login"
 });
+const value = ref("短信登录");
+const options = ["短信登录", "密码登录"];
 const router = useRouter();
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
@@ -100,7 +102,11 @@ onBeforeUnmount(() => {
           <Motion>
             <h2 class="outline-none">{{ title }}</h2>
           </Motion>
-
+          <div class="login-type">
+            <div class="custom-style">
+              <el-segmented v-model="value" :options="options" />
+            </div>
+          </div>
           <el-form
             ref="ruleFormRef"
             :model="ruleForm"
