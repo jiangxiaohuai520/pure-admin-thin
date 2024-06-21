@@ -17,6 +17,7 @@ import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
+import Iphone from "@iconify-icons/ep/iphone";
 
 defineOptions({
   name: "Login"
@@ -35,8 +36,8 @@ dataThemeChange(overallStyle.value);
 const { title } = useNav();
 
 const ruleForm = reactive({
-  username: "admin",
-  password: "admin123"
+  user_name: "",
+  passwd: ""
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -45,9 +46,12 @@ const onLogin = async (formEl: FormInstance | undefined) => {
     if (valid) {
       loading.value = true;
       useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: "admin123" })
+        .loginByUsername({
+          user_name: ruleForm.user_name,
+          passwd: ruleForm.passwd
+        })
         .then(res => {
-          if (res.success) {
+          if (true) {
             // 获取后端路由
             return initRouter().then(() => {
               router.push(getTopMenu(true).path).then(() => {
@@ -55,7 +59,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
               });
             });
           } else {
-            message("登录失败", { type: "error" });
+            message("登录失败11", { type: "error" });
           }
         })
         .finally(() => (loading.value = false));
@@ -107,11 +111,13 @@ onBeforeUnmount(() => {
               <el-segmented v-model="value" :options="options" />
             </div>
           </div>
+          <!-- 密码登录 -->
           <el-form
             ref="ruleFormRef"
             :model="ruleForm"
             :rules="loginRules"
             size="large"
+            v-if="value === '密码登录'"
           >
             <Motion :delay="100">
               <el-form-item
@@ -122,10 +128,10 @@ onBeforeUnmount(() => {
                     trigger: 'blur'
                   }
                 ]"
-                prop="username"
+                prop="user_name"
               >
                 <el-input
-                  v-model="ruleForm.username"
+                  v-model="ruleForm.user_name"
                   clearable
                   placeholder="账号"
                   :prefix-icon="useRenderIcon(User)"
@@ -136,7 +142,7 @@ onBeforeUnmount(() => {
             <Motion :delay="150">
               <el-form-item prop="password">
                 <el-input
-                  v-model="ruleForm.password"
+                  v-model="ruleForm.passwd"
                   clearable
                   show-password
                   placeholder="密码"
@@ -144,19 +150,44 @@ onBeforeUnmount(() => {
                 />
               </el-form-item>
             </Motion>
+          </el-form>
+          <!-- 短信登录 -->
+          <el-form ref="ruleFormRef" size="large" v-if="value === '短信登录'">
+            <Motion>
+              <el-form-item prop="phone">
+                <el-input
+                  clearable
+                  placeholder="手机号码"
+                  :prefix-icon="useRenderIcon(Iphone)"
+                />
+              </el-form-item>
+            </Motion>
 
-            <Motion :delay="250">
-              <el-button
-                class="w-full mt-4"
-                size="default"
-                type="primary"
-                :loading="loading"
-                @click="onLogin(ruleFormRef)"
-              >
-                登录
-              </el-button>
+            <Motion :delay="100">
+              <el-form-item prop="verifyCode">
+                <div class="w-full flex justify-between">
+                  <el-input
+                    clearable
+                    placeholder="验证码"
+                    :prefix-icon="useRenderIcon('ri:shield-keyhole-line')"
+                  />
+                  <el-button class="ml-2">获取验证码</el-button>
+                </div>
+              </el-form-item>
             </Motion>
           </el-form>
+          <!-- 登录按钮 -->
+          <Motion :delay="250">
+            <el-button
+              class="w-full mt-4"
+              size="default"
+              type="primary"
+              :loading="loading"
+              @click="onLogin(ruleFormRef)"
+            >
+              登录
+            </el-button>
+          </Motion>
         </div>
       </div>
     </div>

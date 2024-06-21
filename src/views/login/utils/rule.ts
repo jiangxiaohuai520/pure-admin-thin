@@ -7,7 +7,7 @@ export const REGEXP_PWD =
 
 /** 登录校验 */
 const loginRules = reactive(<FormRules>{
-  password: [
+  passwd: [
     {
       validator: (rule, value, callback) => {
         if (value === "") {
